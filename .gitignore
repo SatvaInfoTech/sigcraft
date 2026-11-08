@@ -1,0 +1,20 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# IDE / Editor Settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node / Dependencies (if added later)
+node_modules/
+package-lock.json
+*.log
+
+# Temporary / Scratch Files
+tmp/
+*.tmp

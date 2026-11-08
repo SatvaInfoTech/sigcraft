@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SigCraft — Free Responsive Email Signature Studio</title>
+  <meta name="description" content="Build modern, pixel-perfect, mobile-safe (320px) email signatures for Gmail, Outlook & Apple Mail. 100% Free & Open-Source.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d6efd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19l7-7 3 3-7 7-3-3z'/%3E%3Cpath d='M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z'/%3E%3Cpath d='M2 2l7.586 7.586'/%3E%3Ccircle cx='11' cy='11' r='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --input-focus: #2563eb;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --header-bg: rgba(255, 255, 255, 0.9);
+      --primary: #0d6efd;
+      --primary-hover: #0b5ed7;
+      --primary-subtle: #eff6ff;
+      --badge-green-bg: #ecfdf5;
+      --badge-green-text: #047857;
+      --badge-green-border: #a7f3d0;
+      --badge-blue-bg: #eff6ff;
+      --badge-blue-text: #1d4ed8;
+      --badge-blue-border: #bfdbfe;
+      --mockup-bg: #f8fafc;
+      --mockup-border: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.08);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --bg-subtle: #0f172a;
+      --card-bg: #0f172a;
+      --card-border: #1e293b;
+      --input-bg: #131d31;
+      --input-border: #293548;
+      --input-focus: #3b82f6;
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --header-bg: rgba(15, 23, 42, 0.9);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-subtle: #1e293b;
+      --badge-green-bg: rgba(16, 185, 129, 0.12);
+      --badge-green-text: #34d399;
+      --badge-green-border: rgba(16, 185, 129, 0.25);
+      --badge-blue-bg: rgba(59, 130, 246, 0.12);
+      --badge-blue-text: #60a5fa;
+      --badge-blue-border: rgba(59, 130, 246, 0.25);
+      --mockup-bg: #060911;
+      --mockup-border: #1e293b;
+      --code-bg: #060911;
+      --code-text: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 14px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* SVG Icon base */
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: middle;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .icon-lg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Header */
+    header.app-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: var(--transition);
+    }
+    .header-inner {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-sizing: border-box;
+      min-height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0d6efd 0%, #6366f1 100%);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(13, 110, 253, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .brand-logo-icon {
+      width: 20px;
+      height: 20px;
+    }
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    .brand-badge {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+      border: 1px solid var(--badge-green-border);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+      display: inline-block;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+    }
+    .badge-pill {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+      border: 1px solid var(--badge-green-border);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      line-height: 1.2;
+    }
+    .badge-free {
+      background: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      border: 1px solid var(--badge-blue-border);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      line-height: 1.2;
+    }
+
+    /* Header Controls */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-header-secondary {
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 9px;
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-header-secondary:hover {
+      background: var(--bg-subtle);
+      color: var(--text);
+      border-color: var(--input-border);
+      transform: translateY(-1px);
+    }
+    .btn-header-secondary:active {
+      transform: translateY(0);
+    }
+    .theme-toggle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .theme-toggle-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text);
+      border-color: var(--input-border);
+      transform: translateY(-1px);
+    }
+    .theme-toggle-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Layout */
+    .app-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 20px 0 0 0;
+      padding: 0 32px 24px 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        padding: 0 20px 24px 20px;
+      }
+      .header-inner {
+        padding: 12px 20px;
+      }
+    }
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 0 12px 20px 12px;
+        margin: 14px 0 0 0;
+      }
+      .header-inner {
+        padding: 10px 14px;
+      }
+    }
+
+    /* Left Form Column */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .form-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .form-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .field-group {
+      margin-bottom: 14px;
+    }
+    .field-group:last-child {
+      margin-bottom: 0;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px) {
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    label.field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    label.field-label span.req {
+      color: #ef4444;
+    }
+    input.field-input, select.field-input {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: var(--transition);
+    }
+    input.field-input:focus, select.field-input:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    input.field-input::placeholder {
+      color: var(--text-muted);
+    }
+    .field-help {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Color Swatches */
+    .color-swatches {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s ease;
+    }
+    .color-swatch:hover {
+      transform: scale(1.12);
+    }
+    .color-swatch.active {
+      border-color: var(--text);
+      box-shadow: 0 0 0 2px var(--card-bg) inset;
+    }
+    .color-picker-input {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 0;
+      cursor: pointer;
+      background: none;
+    }
+
+    /* Social Inputs */
+    .social-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .social-icon-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+    .social-icon-badge img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    /* Button Badges */
+    .btn-info-badge {
+      background: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      border: 1px solid var(--badge-blue-border);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition);
+    }
+    .btn-info-badge:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Right Preview Column (Sticky) */
+    .preview-column {
+      position: sticky;
+      top: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+    .preview-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .btn-group {
+      display: inline-flex;
+      gap: 3px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--card-border);
+      padding: 3px;
+      border-radius: 10px;
+    }
+    .btn-tab {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-tab.active {
+      background: var(--card-bg);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Client Guide Tabs */
+    .guide-tabs-nav {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+    }
+    .guide-tab-btn {
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .guide-tab-btn:hover {
+      color: var(--text);
+      background: var(--card-bg);
+    }
+    .guide-tab-btn.active {
+      background: var(--primary-subtle);
+      color: var(--primary);
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--card-border);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--input-border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-subtle);
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+    .btn-secondary.active {
+      background: var(--primary-subtle);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Email Mockup Canvas */
+    .email-mockup-wrapper {
+      background: var(--mockup-bg);
+      border: 1px solid var(--mockup-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .device-viewport {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 12px;
+      box-sizing: border-box;
+      padding: 20px 22px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      width: 100%;
+    }
+    .viewport-desktop {
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid #e2e8f0;
+    }
+    .viewport-375 {
+      width: 375px;
+      min-width: 375px;
+      max-width: 100%;
+      border: 2px solid #0d6efd;
+      box-shadow: 0 8px 24px rgba(13, 110, 253, 0.15);
+      flex-shrink: 0;
+    }
+    .viewport-320 {
+      width: 320px;
+      min-width: 320px;
+      max-width: 100%;
+      border: 2px solid #e11d48;
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.15);
+      flex-shrink: 0;
+    }
+
+    /* Mockup window bar */
+    .mockup-window-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .window-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .mockup-email-header {
+      font-size: 11px;
+      color: #64748b;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px dashed #e2e8f0;
+      line-height: 1.5;
+    }
+    .mockup-email-body {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Simulated Dark Mode Email Client */
+    .device-viewport.email-dark {
+      background: #141b26 !important;
+      color: #f1f5f9 !important;
+      border-color: #273346 !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .device-viewport.email-dark .mockup-window-bar {
+      border-bottom-color: #222d3d;
+    }
+    .device-viewport.email-dark .mockup-email-header {
+      color: #94a3b8;
+      border-bottom-color: #273346;
+    }
+    .device-viewport.email-dark .mockup-email-header strong {
+      color: #f8fafc;
+    }
+    .device-viewport.email-dark .mockup-email-body {
+      color: #cbd5e1;
+      border-bottom-color: #222d3d;
+    }
+    .device-viewport.email-dark #signature-root table table {
+      background-color: #1a2332 !important;
+      border-color: #2e3b52 !important;
+    }
+    .device-viewport.email-dark #signature-root td {
+      border-color: #2e3b52 !important;
+    }
+    .device-viewport.email-dark #signature-root .sig-name {
+      color: #ffffff !important;
+    }
+    .device-viewport.email-dark #signature-root .sig-title {
+      color: #94a3b8 !important;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      animation: slideUp 0.2s ease-out;
+      border: 1px solid #1e293b;
+    }
+    [data-theme="dark"] .toast {
+      background: #1e293b;
+      border-color: #334155;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 26, 0.7);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      max-width: 680px;
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: zoomIn 0.2s ease;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-close-modal {
+      background: var(--bg-subtle);
+      border: 1px solid var(--card-border);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .btn-close-modal:hover {
+      background: var(--card-border);
+      color: var(--text);
+    }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .guide-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      font-weight: 800;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--badge-blue-border);
+    }
+    .url-converter-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    /* Raw HTML Viewer */
+    .code-viewer {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      max-height: 220px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 12px;
+      border: 1px solid var(--card-border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">
+          <!-- Sleek Signature Quill Vector -->
+          <svg class="brand-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+            <path d="M2 2l7.586 7.586"/>
+            <circle cx="11" cy="11" r="2"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-top-row">
+            <span class="brand-title">SigCraft</span>
+            <span class="brand-badge">
+              <span class="badge-dot"></span>
+              Free &amp; Open Source
+            </span>
+          </div>
+          <div class="brand-sub">Animated Email Signature Studio</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Reset Sample -->
+        <button class="btn-header-secondary" onclick="resetToSample()" title="Reset all fields to sample template">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Reset Sample</span>
+        </button>
+
+        <!-- Theme Toggle (Light / Dark) -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme">
+          <svg class="icon" id="themeIcon" viewBox="0 0 24 24">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid App Container -->
+  <main class="app-container">
+
+    <!-- LEFT: Form Builder Panel -->
+    <div class="form-panel">
+
+      <!-- 1. Personal & Company Info -->
+      <section class="form-card">
+        <div class="form-card-header">
+          <h2 class="form-card-title">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Identity &amp; Organization</span>
+          </h2>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Full Name <span class="req">*</span></label>
+            <input type="text" class="field-input" id="inputName" placeholder="Your Name" oninput="updateSignature()">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Job Title / Role</label>
+            <input type="text" class="field-input" id="inputTitle" placeholder="Job Title" oninput="updateSignature()">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Company Name <span class="req">*</span></label>
+            <input type="text" class="field-input" id="inputCompany" placeholder="Company Name" oninput="updateSignature()">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Website Display Text</label>
+            <input type="text" class="field-input" id="inputWebText" placeholder="www.yourcompany.com" oninput="updateSignature()">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Website URL</label>
+          <input type="url" class="field-input" id="inputWebUrl" placeholder="https://www.yourcompany.com" oninput="updateSignature()">
+        </div>
+
+        <!-- Brand Accent Color -->
+        <div class="field-group" style="margin-top: 14px;">
+          <label class="field-label">Brand Accent Color</label>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="color" class="color-picker-input" id="inputColorPicker" value="#0d6efd" onchange="setColor(this.value)">
+            <input type="text" class="field-input" id="inputColorHex" value="#0d6efd" style="width: 100px; text-transform: uppercase;" oninput="setColor(this.value)">
+            <div class="color-swatches">
+              <div class="color-swatch active" style="background:#0d6efd;" onclick="setColor('#0d6efd', this)" title="Tech Blue"></div>
+              <div class="color-swatch" style="background:#10b981;" onclick="setColor('#10b981', this)" title="Emerald"></div>
+              <div class="color-swatch" style="background:#6366f1;" onclick="setColor('#6366f1', this)" title="Indigo"></div>
+              <div class="color-swatch" style="background:#8b5cf6;" onclick="setColor('#8b5cf6', this)" title="Purple"></div>
+              <div class="color-swatch" style="background:#f43f5e;" onclick="setColor('#f43f5e', this)" title="Rose"></div>
+              <div class="color-swatch" style="background:#0f172a;" onclick="setColor('#0f172a', this)" title="Midnight"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Social Links (Unified Icons) -->
+      <section class="form-card">
+        <div class="form-card-header">
+          <h2 class="form-card-title">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
+            <span>Social Channels (Left Pill)</span>
+          </h2>
+          <span style="font-size: 11px; color: var(--text-muted);">Leave empty to hide</span>
+        </div>
+
+        <!-- Website -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/domain.png" alt="Web">
+          </div>
+          <input type="url" class="field-input" id="socialWeb" placeholder="https://www.yourcompany.com" oninput="updateSignature()">
+        </div>
+
+        <!-- LinkedIn -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/linkedin.png" alt="LinkedIn">
+          </div>
+          <input type="url" class="field-input" id="socialLinkedIn" placeholder="https://www.linkedin.com/in/..." oninput="updateSignature()">
+        </div>
+
+        <!-- Instagram -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/instagram-new.png" alt="Instagram">
+          </div>
+          <input type="url" class="field-input" id="socialInstagram" placeholder="https://www.instagram.com/..." oninput="updateSignature()">
+        </div>
+
+        <!-- Facebook -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/facebook-new.png" alt="Facebook">
+          </div>
+          <input type="url" class="field-input" id="socialFacebook" placeholder="https://www.facebook.com/..." oninput="updateSignature()">
+        </div>
+
+        <!-- Twitter / X -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/twitterx.png" alt="Twitter">
+          </div>
+          <input type="url" class="field-input" id="socialTwitter" placeholder="https://x.com/... (Optional)" oninput="updateSignature()">
+        </div>
+
+        <!-- GitHub -->
+        <div class="social-row">
+          <div class="social-icon-badge">
+            <img src="https://img.icons8.com/ios-filled/50/64748b/github.png" alt="GitHub">
+          </div>
+          <input type="url" class="field-input" id="socialGitHub" placeholder="https://github.com/... (Optional)" oninput="updateSignature()">
+        </div>
+      </section>
+
+      <!-- 3. Logo / Animated Graphic -->
+      <section class="form-card">
+        <div class="form-card-header">
+          <h2 class="form-card-title">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <span>Logo &amp; Animated Graphic</span>
+          </h2>
+          <button class="btn-info-badge" onclick="openGuideModal()">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+            <span>Hosting Steps</span>
+          </button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            Logo Image URL (Static PNG/JPG or Animated GIF)
+          </label>
+          <input type="url" class="field-input" id="inputLogoUrl" 
+                 placeholder="https://.../logo.png or animated logo.gif" 
+                 oninput="updateSignature()">
+          <div class="field-help">
+            <svg class="icon" style="width:14px; height:14px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+            <span>Use a public HTTPS link (GitHub, Cloudinary, ImgBB, etc.) so recipients can view it.</span>
+          </div>
+
+          <!-- Dark Mode Pro-Tip Card -->
+          <div style="margin-top: 12px; padding: 11px 14px; background: var(--bg-subtle); border: 1px solid var(--card-border); border-radius: 9px; display: flex; gap: 10px; align-items: flex-start;">
+            <svg class="icon" style="width: 15px; height: 15px; color: var(--primary); margin-top: 2px; flex-shrink: 0;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+            <div style="font-size: 11px; line-height: 1.5; color: var(--text-secondary);">
+              <strong style="color: var(--text);">Dark Mode Tip:</strong> For seamless blending across all email clients (Gmail, Apple Mail, Thunderbird), use a logo/GIF with a <strong>transparent background</strong> so it looks natural on both light and dark reading themes.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT: Live Preview & Export Toolbar -->
+    <div class="preview-column">
+      <div class="preview-card">
+        <div class="preview-toolbar">
+          <div class="btn-group">
+            <button class="btn-tab active" onclick="switchViewport('desktop', this)">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              <span>Desktop</span>
+            </button>
+            <button class="btn-tab" onclick="switchViewport('375', this)">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+              <span>375px</span>
+            </button>
+            <button class="btn-tab" onclick="switchViewport('320', this)">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="12" height="18" x="6" y="3" rx="2" ry="2"/><path d="M12 17h.01"/></svg>
+              <span>320px Safe</span>
+            </button>
+          </div>
+
+          <!-- Email Client Canvas Theme Toggle -->
+          <div class="btn-group">
+            <button class="btn-tab active" id="btnEmailLight" onclick="setEmailTheme('light', this)" title="Preview on Light Email Client (e.g. Gmail Light / Outlook Light)">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              <span>Light Email</span>
+            </button>
+            <button class="btn-tab" id="btnEmailDark" onclick="setEmailTheme('dark', this)" title="Preview on Dark Email Client (e.g. Thunderbird Dark / Outlook Dark)">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              <span>Dark Email</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulated Email Client Canvas -->
+        <div class="email-mockup-wrapper">
+          <div class="device-viewport viewport-desktop" id="deviceViewport">
+            
+            <!-- Window dots -->
+            <div class="mockup-window-bar">
+              <span class="window-dot dot-red"></span>
+              <span class="window-dot dot-yellow"></span>
+              <span class="window-dot dot-green"></span>
+            </div>
+
+            <div class="mockup-email-header">
+              To: <strong>client@example.com</strong><br>
+              Subject: <strong>Project Milestone &amp; Update</strong>
+            </div>
+
+            <div class="mockup-email-body">
+              Hi there,<br><br>
+              It was great speaking earlier today. I've attached the finalized documents for your review. Looking forward to our next steps!<br><br>
+              Best regards,
+            </div>
+
+            <!-- THE SIGNATURE ROOT CONTAINER -->
+            <div id="signature-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Export Actions Toolbar -->
+        <div class="actions-bar">
+          <button class="btn-primary" onclick="copySignature()">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <span>Copy Signature</span>
+          </button>
+          <button class="btn-secondary" id="btnToggleHtml" onclick="toggleCodeViewer()">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span id="btnToggleHtmlText">View HTML</span>
+          </button>
+          <button class="btn-secondary" onclick="downloadHtml()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            <span>Download</span>
+          </button>
+        </div>
+
+        <!-- Raw HTML Drawer -->
+        <div id="codeDrawer" style="display: none; margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text);">Raw Signature HTML:</span>
+            <button class="btn-secondary" onclick="copyRawHtml()" style="padding: 4px 8px; font-size: 11px;">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy Code</span>
+            </button>
+          </div>
+          <pre class="code-viewer" id="rawCodeViewer"></pre>
+        </div>
+
+        <!-- Deployment steps -->
+        <div style="margin-top: 20px; padding: 14px; background: var(--bg-subtle); border: 1px solid var(--card-border); border-radius: 10px;">
+          <div class="guide-tabs-nav">
+            <button class="guide-tab-btn active" id="guideTabBtn_gmail" onclick="switchGuideTab('gmail')">Gmail / Outlook</button>
+            <button class="guide-tab-btn" id="guideTabBtn_thunderbird" onclick="switchGuideTab('thunderbird')">Thunderbird</button>
+            <button class="guide-tab-btn" id="guideTabBtn_apple" onclick="switchGuideTab('apple')">Apple Mail</button>
+          </div>
+
+          <!-- Gmail / Outlook Guide -->
+          <div class="guide-tab-content" id="guideTabContent_gmail">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px;">
+              How to add to Gmail / Outlook:
+            </div>
+            <ol style="margin-left: 18px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+              <li>Click the blue <strong>"Copy Signature"</strong> button above.</li>
+              <li>In <strong>Gmail</strong>, open <em>Settings &rarr; See all settings &rarr; General &rarr; Signature</em> (or <em>View all Outlook settings &rarr; Compose and reply</em>).</li>
+              <li>Click <em>"Create new"</em> and press <kbd>Ctrl+V</kbd> (or <kbd>Cmd+V</kbd> on Mac).</li>
+              <li>Scroll down and click <strong>"Save Changes"</strong>.</li>
+            </ol>
+          </div>
+
+          <!-- Thunderbird Guide -->
+          <div class="guide-tab-content" id="guideTabContent_thunderbird" style="display: none;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px;">
+              How to add to Mozilla Thunderbird:
+            </div>
+            <ol style="margin-left: 18px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+              <li>In Thunderbird, open <strong>Account Settings</strong> and select your email account.</li>
+              <li><strong>Option A (Easiest):</strong> Click <strong>"Download"</strong> above to save <code>email-signature.html</code>. In Thunderbird, check <input type="checkbox" checked disabled> <strong>"Attach the signature from a file instead"</strong>, click <em>Choose...</em>, and pick the file.</li>
+              <li><strong>Option B (Direct HTML):</strong> Click <strong>"View HTML"</strong> &rarr; <strong>"Copy Code"</strong> above. In Thunderbird, check <input type="checkbox" checked disabled> <strong>"Use HTML"</strong> and paste into the <em>Signature text</em> box.</li>
+            </ol>
+          </div>
+
+          <!-- Apple Mail Guide -->
+          <div class="guide-tab-content" id="guideTabContent_apple" style="display: none;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px;">
+              How to add to Apple Mail:
+            </div>
+            <ol style="margin-left: 18px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+              <li>Click <strong>"Copy Signature"</strong> above.</li>
+              <li>In Apple Mail, open <em>Settings (Preferences) &rarr; Signatures</em>.</li>
+              <li>Click <strong>+</strong> to add a signature, <strong>uncheck</strong> <em>"Always match my default message font"</em>, and press <kbd>Cmd+V</kbd>.</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Image Hosting Guide Modal -->
+  <div class="modal-backdrop" id="guideModal" onclick="if(event.target === this) closeGuideModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+          <span>How to Host Your Logo / GIF for 100% Free</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeGuideModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p style="margin-bottom: 14px;">
+          For animated signatures to work in email clients, the image must be hosted on an <strong>HTTPS web link</strong>. Here is how to host any logo or animated GIF permanently for free:
+        </p>
+
+        <!-- Method 1: GitHub -->
+        <div style="font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>
+          <span>Method 1: GitHub (100% Free &amp; Permanent &mdash; Recommended)</span>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">1</div>
+          <div>Create a free public repository on <a href="https://github.com/new" target="_blank" style="color: var(--primary); font-weight: 600;">GitHub.com/new</a> (e.g. named <code>media-library</code> or <code>assets</code>).</div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">2</div>
+          <div>Click <strong>Add file</strong> &rarr; <strong>Upload files</strong>, select your logo / GIF, and click <strong>Commit changes</strong>.</div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">3</div>
+          <div>Open your uploaded file on GitHub. Paste that page's URL into our converter below to get your direct image link:</div>
+        </div>
+
+        <!-- Built-in URL Converter -->
+        <div class="url-converter-card">
+          <div style="font-weight: 700; font-size: 12px; color: var(--primary); margin-bottom: 6px;">
+            Instant GitHub URL Converter:
+          </div>
+          <input type="text" class="field-input" id="ghBlobInput" 
+                 placeholder="Paste https://github.com/user/repo/blob/main/logo.gif" 
+                 oninput="convertGithubUrl()">
+          
+          <div id="ghOutputContainer" style="display: none; margin-top: 10px;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Direct Image URL:</div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" class="field-input" id="ghDirectOutput" readonly style="font-family: monospace; font-size: 11px;">
+              <button class="btn-primary" onclick="useConvertedUrl()" style="padding: 6px 12px; font-size: 12px; white-space: nowrap;">
+                Use in Signature
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method 2: Instant Hosts -->
+        <div style="font-weight: 700; font-size: 14px; color: var(--text); margin: 20px 0 8px;">
+          Method 2: Instant Free Image Hosts (No Account Needed)
+        </div>
+        <ul style="margin-left: 20px; line-height: 1.6;">
+          <li><a href="https://postimages.org/" target="_blank" style="color: var(--primary); font-weight: 600;">Postimages.org</a> &mdash; Upload file, then copy the <strong>Direct Link</strong> (ends in <code>.gif</code> or <code>.png</code>).</li>
+          <li><a href="https://imgbb.com/" target="_blank" style="color: var(--primary); font-weight: 600;">ImgBB.com</a> &mdash; Upload file, set "Don't autodelete", and copy the direct image link.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <svg class="icon" viewBox="0 0 24 24" style="color:#10b981;"><polyline points="20 6 9 17 4 12"/></svg>
+    <span>Signature copied to clipboard! Ready to paste into your email settings.</span>
+  </div>
+
+  <script>
+    // Unified public CDN icons (same 50px geometry, transparent background, matching weights)
+    // Uses slate-500 (#64748b) for universal contrast in both light and dark mode email clients
+    const socialIcons = {
+      web: 'https://img.icons8.com/ios-filled/50/64748b/domain.png',
+      linkedin: 'https://img.icons8.com/ios-filled/50/64748b/linkedin.png',
+      instagram: 'https://img.icons8.com/ios-filled/50/64748b/instagram-new.png',
+      facebook: 'https://img.icons8.com/ios-filled/50/64748b/facebook-new.png',
+      twitter: 'https://img.icons8.com/ios-filled/50/64748b/twitterx.png',
+      github: 'https://img.icons8.com/ios-filled/50/64748b/github.png'
+    };
+
+    let activeColor = '#0d6efd';
+
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('sigcraft-theme') || 'light';
+      setTheme(savedTheme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('sigcraft-theme', theme);
+      const icon = document.getElementById('themeIcon');
+      if (theme === 'dark') {
+        // Sun icon
+        icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+        setEmailTheme('dark');
+      } else {
+        // Moon icon
+        icon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>';
+        setEmailTheme('light');
+      }
+    }
+
+    function setEmailTheme(theme, btn) {
+      const vp = document.getElementById('deviceViewport');
+      const lightBtn = document.getElementById('btnEmailLight');
+      const darkBtn = document.getElementById('btnEmailDark');
+
+      if (!vp) return;
+
+      if (theme === 'dark') {
+        vp.classList.add('email-dark');
+        if (darkBtn) darkBtn.classList.add('active');
+        if (lightBtn) lightBtn.classList.remove('active');
+      } else {
+        vp.classList.remove('email-dark');
+        if (lightBtn) lightBtn.classList.add('active');
+        if (darkBtn) darkBtn.classList.remove('active');
+      }
+    }
+
+    function switchGuideTab(client) {
+      document.querySelectorAll('.guide-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.guide-tab-content').forEach(c => c.style.display = 'none');
+      const btn = document.getElementById('guideTabBtn_' + client);
+      const content = document.getElementById('guideTabContent_' + client);
+      if (btn) btn.classList.add('active');
+      if (content) content.style.display = 'block';
+    }
+
+    function setColor(color, swatchEl) {
+      activeColor = color;
+      document.getElementById('inputColorPicker').value = color;
+      document.getElementById('inputColorHex').value = color.toUpperCase();
+
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+      if (swatchEl) {
+        swatchEl.classList.add('active');
+      }
+      updateSignature();
+    }
+
+    function updateSignature() {
+      const name = document.getElementById('inputName').value.trim() || 'Your Name';
+      const title = document.getElementById('inputTitle').value.trim() || 'Job Title';
+      const company = document.getElementById('inputCompany').value.trim() || 'Your Company Name';
+      const webUrl = document.getElementById('inputWebUrl').value.trim() || 'https://www.yourcompany.com';
+      const webText = document.getElementById('inputWebText').value.trim() || 'www.yourcompany.com';
+      const logoUrl = document.getElementById('inputLogoUrl').value.trim() || 'https://mir-s3-cdn-cf.behance.net/project_modules/hd/5eeea355389655.59822ff824b72.gif';
+
+      // Gather active social links
+      const activeSocials = [];
+      const webLink = document.getElementById('socialWeb').value.trim();
+      if (webLink) activeSocials.push({ name: 'Web', url: webLink, icon: socialIcons.web });
+
+      const fbLink = document.getElementById('socialFacebook').value.trim();
+      if (fbLink) activeSocials.push({ name: 'Facebook', url: fbLink, icon: socialIcons.facebook });
+
+      const igLink = document.getElementById('socialInstagram').value.trim();
+      if (igLink) activeSocials.push({ name: 'Instagram', url: igLink, icon: socialIcons.instagram });
+
+      const liLink = document.getElementById('socialLinkedIn').value.trim();
+      if (liLink) activeSocials.push({ name: 'LinkedIn', url: liLink, icon: socialIcons.linkedin });
+
+      const twLink = document.getElementById('socialTwitter').value.trim();
+      if (twLink) activeSocials.push({ name: 'Twitter', url: twLink, icon: socialIcons.twitter });
+
+      const ghLink = document.getElementById('socialGitHub').value.trim();
+      if (ghLink) activeSocials.push({ name: 'GitHub', url: ghLink, icon: socialIcons.github });
+
+      // Generate Social Pill Rows
+      // If user provided social links, use them; if all are blank, show standard sample pill in preview
+      const displaySocials = activeSocials.length > 0 ? activeSocials : [
+        { name: 'Web', url: 'https://www.yourcompany.com', icon: socialIcons.web },
+        { name: 'LinkedIn', url: 'https://www.linkedin.com', icon: socialIcons.linkedin },
+        { name: 'Instagram', url: 'https://www.instagram.com', icon: socialIcons.instagram },
+        { name: 'Facebook', url: 'https://www.facebook.com', icon: socialIcons.facebook }
+      ];
+
+      let socialRowsHtml = '';
+      displaySocials.forEach(s => {
+        socialRowsHtml += `<tr><td style="padding: 2px 0;" align="center"><a href="${s.url}" target="_blank" title="${s.name}"><img alt="${s.name}" src="${s.icon}" width="14" height="14" style="display:block; border:0; width:14px; height:14px;"></a></td></tr>`;
+      });
+
+      // Calculate vertical padding to match the ~106px card height
+      // Each icon row: 14px + 4px (padding: 2px 0) = 18px
+      let outerPadV = 16;
+      if (displaySocials.length >= 6) outerPadV = 1;
+      else if (displaySocials.length === 5) outerPadV = 7;
+      else if (displaySocials.length === 4) outerPadV = 16;
+      else if (displaySocials.length === 3) outerPadV = 25;
+      else if (displaySocials.length === 2) outerPadV = 34;
+      else if (displaySocials.length === 1) outerPadV = 43;
+
+      let socialCellHtml = `
+              <!-- 1. LEFT COLUMN: Social Icons -->
+              <td valign="top" align="center" style="vertical-align: top; width: 22px; padding-right: 6px;">
+                <table border="0" cellspacing="0" cellpadding="0" style="border-collapse: separate; border: 1px solid #e2e8f0; border-radius: 6px; padding: ${outerPadV}px 2px; background-color: #f8fafc;">
+                  <tbody>
+                    ${socialRowsHtml}
+                  </tbody>
+                </table>
+              </td>`;
+
+      // Generate Full Signature HTML
+      const signatureHtml = `
+<table id="signature-root" align="left" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif; width: 100%; max-width: 270px; margin: 0; margin-right: auto;">
+  <tbody>
+    <tr>
+      <td style="padding: 0; border-collapse: collapse;">
+        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: separate; width: 100%;">
+          <tbody>
+            <tr>
+
+${socialCellHtml}
+
+              <!-- 2. RIGHT MAIN CARD: Details + 1:1 Square Logo -->
+              <td valign="top" style="vertical-align: top;">
+                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: separate; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 9px; background-color: #ffffff; width: 100%;">
+                  <tbody>
+                    <tr>
+
+                      <!-- Details -->
+                      <td valign="middle" align="left" style="vertical-align: middle; line-height: 1.35; padding-right: 8px;">
+                        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                          <tbody>
+                            <tr><td class="sig-name" style="padding-bottom: 2px; font-size: 13px; font-weight: 700; color: #111827; white-space: nowrap; font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;">${escapeHtml(name)}</td></tr>
+                            <tr><td class="sig-title" style="font-size: 11px; color: #64748b; font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif; white-space: nowrap; padding-bottom: 2px;">${escapeHtml(title)}</td></tr>
+                            <tr><td style="font-size: 11px; font-weight: 700; color: ${activeColor}; font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif; white-space: nowrap; padding-bottom: 3px;">${escapeHtml(company)}</td></tr>
+                            <tr><td style="font-size: 11px; font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif; white-space: nowrap;"><a href="${webUrl}" target="_blank" style="color: ${activeColor}; text-decoration: none; font-weight: 500;">${escapeHtml(webText)}</a></td></tr>
+                          </tbody>
+                        </table>
+                      </td>
+
+                      <!-- Vertical Thin Divider -->
+                      <td valign="middle" style="border-left: 1px solid #e2e8f0; width: 1px; padding-right: 8px;"></td>
+
+                      <!-- 1:1 Square Logo / Animated Graphic -->
+                      <td valign="middle" align="center" style="vertical-align: middle; width: 84px;">
+                        <a href="${webUrl}" target="_blank" style="text-decoration: none; display: block; width: 84px; height: 84px;">
+                          <img id="reelGraphicImg" 
+                               src="${logoUrl}" 
+                               width="84" 
+                               height="84" 
+                               alt="${escapeHtml(company)}" 
+                               style="display: block; border: 0; width: 84px; height: 84px; aspect-ratio: 1 / 1; object-fit: contain;">
+                        </a>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>`.trim();
+
+      document.getElementById('signature-container').innerHTML = signatureHtml;
+      document.getElementById('rawCodeViewer').innerText = signatureHtml;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function switchViewport(device, btn) {
+      const shell = document.getElementById('deviceViewport');
+      btn.parentElement.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      shell.classList.remove('viewport-desktop', 'viewport-375', 'viewport-320');
+      if (device === 'desktop') shell.classList.add('viewport-desktop');
+      else if (device === '375') shell.classList.add('viewport-375');
+      else if (device === '320') shell.classList.add('viewport-320');
+    }
+
+    async function copySignature() {
+      const root = document.getElementById('signature-root');
+      if (!root) return;
+
+      const html = root.outerHTML;
+      const text = root.innerText;
+
+      try {
+        const blob = new Blob([html], { type: 'text/html' });
+        const textBlob = new Blob([text], { type: 'text/plain' });
+        const item = new ClipboardItem({
+          'text/html': blob,
+          'text/plain': textBlob
+        });
+        await navigator.clipboard.write([item]);
+        showToast('Signature copied! Ready to paste with Ctrl+V into your email.');
+      } catch (err) {
+        const range = document.createRange();
+        range.selectNode(root);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+        showToast('Signature copied to clipboard!');
+      }
+    }
+
+    function copyRawHtml() {
+      const code = document.getElementById('rawCodeViewer').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Raw HTML copied to clipboard!');
+      });
+    }
+
+    function toggleCodeViewer() {
+      const drawer = document.getElementById('codeDrawer');
+      const btn = document.getElementById('btnToggleHtml');
+      const textSpan = document.getElementById('btnToggleHtmlText');
+      const icon = btn.querySelector('.icon');
+      const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
+
+      if (isHidden) {
+        drawer.style.display = 'block';
+        btn.classList.add('active');
+        textSpan.textContent = 'Hide HTML';
+        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" x2="23" y1="1" y2="23"/>';
+      } else {
+        drawer.style.display = 'none';
+        btn.classList.remove('active');
+        textSpan.textContent = 'View HTML';
+        icon.innerHTML = '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>';
+      }
+    }
+
+    function downloadHtml() {
+      const root = document.getElementById('signature-root');
+      if (!root) return;
+      const blob = new Blob([root.outerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'email-signature.html';
+      a.click();
+      showToast('email-signature.html downloaded!');
+    }
+
+    function resetToSample() {
+      document.getElementById('inputName').value = '';
+      document.getElementById('inputTitle').value = '';
+      document.getElementById('inputCompany').value = '';
+      document.getElementById('inputWebText').value = '';
+      document.getElementById('inputWebUrl').value = '';
+      document.getElementById('socialWeb').value = '';
+      document.getElementById('socialLinkedIn').value = '';
+      document.getElementById('socialInstagram').value = '';
+      document.getElementById('socialFacebook').value = '';
+      document.getElementById('socialTwitter').value = '';
+      document.getElementById('socialGitHub').value = '';
+      document.getElementById('inputLogoUrl').value = '';
+      setColor('#0d6efd');
+      updateSignature();
+      showToast('All fields reset to empty placeholders');
+    }
+
+    // Modal logic
+    function openGuideModal() {
+      document.getElementById('guideModal').style.display = 'flex';
+    }
+    function closeGuideModal() {
+      document.getElementById('guideModal').style.display = 'none';
+    }
+
+    function convertGithubUrl() {
+      const val = document.getElementById('ghBlobInput').value.trim();
+      const outContainer = document.getElementById('ghOutputContainer');
+      const outInput = document.getElementById('ghDirectOutput');
+
+      // Convert https://github.com/USER/REPO/blob/BRANCH/FILE -> https://raw.githubusercontent.com/USER/REPO/BRANCH/FILE
+      const regex = /github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)/;
+      const match = val.match(regex);
+
+      if (match) {
+        const user = match[1];
+        const repo = match[2];
+        const branch = match[3];
+        const file = match[4];
+        const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${file}`;
+        outInput.value = rawUrl;
+        outContainer.style.display = 'block';
+      } else if (val.startsWith('https://raw.githubusercontent.com/')) {
+        outInput.value = val;
+        outContainer.style.display = 'block';
+      } else {
+        outContainer.style.display = 'none';
+      }
+    }
+
+    function useConvertedUrl() {
+      const url = document.getElementById('ghDirectOutput').value;
+      if (url) {
+        document.getElementById('inputLogoUrl').value = url;
+        updateSignature();
+        closeGuideModal();
+        showToast('Logo URL updated with GitHub link!');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.querySelector('span').innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      updateSignature();
+    });
+  </script>
+
+</body>
+</html>
