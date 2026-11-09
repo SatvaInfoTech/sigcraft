@@ -10,11 +10,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](#contributing)
 [![Status](https://img.shields.io/badge/Status-Production_Ready-0d6efd.svg)](#)
 
-[Live Demo](https://satvainfotech.github.io/sigcraft/) • [Key Features](#key-features) • [Try Online](#try-it-online) • [Supported Clients](#supported-email-clients) • [Contributing](#contributing)
+[Live Demo](https://sigcraft.satvainfotech.com/) • [Key Features](#key-features) • [Try Online](#try-it-online) • [Supported Clients](#supported-email-clients) • [Contributing](#contributing)
 
 <br/>
 
-[![SigCraft Studio Preview](assets/preview.png)](https://satvainfotech.github.io/sigcraft/)
+[![SigCraft Studio Preview](assets/preview.png)](https://sigcraft.satvainfotech.com/)
 
 </div>
 
@@ -52,7 +52,7 @@ Most email signature builders suffer from the same frustrating problems:
 
 Access the live studio directly in your browser without any installation:
 
-**[Launch SigCraft Studio](https://satvainfotech.github.io/sigcraft/)**  
+**[Launch SigCraft Studio](https://sigcraft.satvainfotech.com/)**  
 *(Free • Open Source • No Account Required)*
 
 Alternatively, clone or download this repository and open `index.html` locally.
